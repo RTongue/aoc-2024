@@ -4,9 +4,10 @@
   "description": "Solutions for the 2024 advent of code challenge",
   "main": "index.js",
   "scripts": {
-    "day1": "ts-node --swc day1/index.ts",
+    "bootstrap": "plop day",
+    "day": "node -e \"require('child_process').execSync('ts-node --swc day' + process.argv[1] + '/index.ts', { stdio: 'inherit' })\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:day1": "jest day1/"
+    "test:day": "node -e \"require('child_process').execSync('jest day' + process.argv[1] + '/', { stdio: 'inherit' })\""
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.1",
     "jest": "^29.7.0",
+    "plop": "^4.0.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2"
