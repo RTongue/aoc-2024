@@ -65,7 +65,7 @@ describe('Day 5', () => {
   })
 
   describe('part two', () => {
-    it.only('correctly orders out of order pages', () => {
+    it('correctly orders out of order pages', () => {
       const { rules } = parseInput(`47|53
 97|13
 97|61
@@ -158,5 +158,3 @@ describe('Day 5', () => {
     })
   })
 })
-
-// wrong part 2 answer: 3377 Too high

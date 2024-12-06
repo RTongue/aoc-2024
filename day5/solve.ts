@@ -47,8 +47,7 @@ export function solvePartOne (input: string) {
       const currentPageRule = ruleMap[currentPage]
       const nextPageRule = ruleMap[nextPage]
       if (!currentPageRule?.before.includes(nextPage) || nextPageRule?.before.includes(currentPage)) {
-        // console.log(currentPage, nextPage, currentPageRule, nextPageRule)
-        countInvalidRows++
+         countInvalidRows++
         valid = false
         break
       }
@@ -60,35 +59,24 @@ export function solvePartOne (input: string) {
     }
   }
 
-  console.log('countInvalidRows', countInvalidRows)
   return middlePageNumberSum
 }
 
 export function order(pages: string[], ruleMap: {}): string[] {
-  const correctOrder: string[] = []
-  console.log(pages)
-  console.log(ruleMap)
-
-  for (let i = 1; i < pages.length; i++) {
-    let page = pages[i]
-    let rule = ruleMap[page]
-    if (!ruleMap) continue
-    for (let j = i - 1; j >= 0; j--) {
-      
-      const previousPage = pages[j]
-      const previoiusPageRule = ruleMap[previousPage]
-      if (rule?.before.includes(previousPage)) {
-        pages.splice(i, 1)
-        pages.splice(j, 0, page)
-        console.log(i, j)
-        console.log(pages)
-        page = pages[i]
-        rule = ruleMap[page]
-      }
+  return pages.sort((a, b) => {
+    const ruleA = ruleMap[a]
+    const ruleB = ruleMap[b]
+    // if b is in ruleA before, a should come before b
+    // if a is in ruleB before, b should come before a
+    // else return 0
+    if (ruleA?.before.includes(b)) {
+      return -1
+    } else if (ruleB?.before.includes(a)) {
+      return 1
+    } else {
+      return 0
     }
-  }
-
-  return pages
+  })
 }
 
 export function solvePartTwo (input: string) {
@@ -107,7 +95,6 @@ export function solvePartTwo (input: string) {
       const currentPageRule = ruleMap[currentPage]
       const nextPageRule = ruleMap[nextPage]
       if (!currentPageRule?.before.includes(nextPage) || nextPageRule?.before.includes(currentPage)) {
-        // console.log(currentPage, nextPage, currentPageRule, nextPageRule)
         valid = false
         break
       }
@@ -116,12 +103,10 @@ export function solvePartTwo (input: string) {
     if (!valid) {
       countInvalidRows++
       const correctOrdering: string[] = order(pages, ruleMap)
-      console.log(correctOrdering)
       const middle = findMiddle(correctOrdering)
       middlePageNumberSum += Number(middle)
     }
   }
   
-  console.log('countInvalidRows', countInvalidRows)
   return middlePageNumberSum
 }
