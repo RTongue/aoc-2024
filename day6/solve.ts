@@ -24,23 +24,44 @@ function getNextDirection(dirChar: string): string {
 }
 
 function getPositions(grid, startX, startY, direction, dirChar) {
-  let visited = 1
+  // console.log('get positions: grid', grid, 'x', startX, 'y', startY, 'directoin', direction, 'direChar', dirChar)
+  let visited = 0
 
-  for (let x = startX + direction[0]; x < grid.length && x > 0; x + direction[0]) {
-    const nextRow = grid[x + direction[0]]
+  for (let x = startX + direction[0]; x < grid.length + 1 && x >= 0; x += direction[0]) {
+    // console.log('x', x, 'direction[0]', direction[0])
+    const nextRow = grid[x]
+    // console.log('nextRow', nextRow)
     if (nextRow === undefined) return visited
-    for (let y = startY; x < nextRow.length; y + direction[1]) {
-      const cell = grid[x + direction[0]][y + direction[1]]
+    for (let y = startY + direction[1]; y < nextRow.length + 1 && y >= 0; y += direction[1]) {
+      const cell = nextRow[y]
+      console.log('direction', direction, 'x', x, 'y', y, 'cell', cell)
       if (cell === '#') {
         const nextDirChar = getNextDirection(dirChar)
-        visited += getPositions(grid, x, y, directions[nextDirChar], nextDirChar)
+        // console.log('nextDirChar', nextDirChar)
+        // console.log('next direction', directions[nextDirChar])
+        return visited + getPositions(grid, x - direction[0], y - direction[1], directions[nextDirChar], nextDirChar)
       } else if (cell === '.') {
         visited++
+        nextRow[y] = 'X'
+        // console.log('visited++')
       } else if (cell === undefined) {
+        // console.log('cell', cell)
         return visited
       }
+
+      if (direction[1] === 0) {
+        break
+      }
+    }
+
+    if (direction[0] === 0) {
+      break
     }
   }
+
+  // console.log('returning visited', visited)
+
+  return visited
 }
 
 export function solvePartOne (input: string) {
@@ -61,12 +82,13 @@ export function solvePartOne (input: string) {
     return accum
   }, [null, null])
 
-  console.log('[x, y', [startX, startY])
+  console.log('[x, y]', [startX, startY])
   console.log('Start', grid[startX][startY])
   const startChar = grid[startX][startY]
   const direction = directions[startChar]
+  console.log('direction', direction)
 
-  const positions = getPositions(grid, startX, startY, direction, startChar)
+  const positions = 1 + getPositions(grid, startX, startY, direction, startChar)
 
   return positions
 }
